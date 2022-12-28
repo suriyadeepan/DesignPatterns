@@ -1,13 +1,16 @@
 from flask import Flask, render_template
+from flask_caching import Cache
 import requests
 import json
 
+config = {
+    "DEBUG": True,          # some Flask specific configs
+    "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 60
+}
 app = Flask(__name__)
-
-
-# @app.route("/")
-# def index():
-#     return "<h1>Hello</h1>"
+app.config.from_mapping(config)
+cache = Cache(app)
 
 
 def get_meme():
@@ -19,6 +22,7 @@ def get_meme():
 
 
 @app.route("/")
+@cache.cached(timeout=60)
 def index():
     meme_pic, subreddit = get_meme()
     return render_template("meme_index.html",

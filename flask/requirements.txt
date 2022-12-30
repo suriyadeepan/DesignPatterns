@@ -1,3 +1,9 @@
 Flask
 requests
 Flask-Caching
+Flask-SQLAlchemy
+Flask-Login
+Flask-Bcrypt
+Flask-WTF
+WTForms
+email-validator

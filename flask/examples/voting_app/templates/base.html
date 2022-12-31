@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/  
+                                 css/bulma.min.css" />
+    {% endblock %}
+</head>
+<body>
+    <section class="hero is-dark is-fullheight">
+        <div class="hero-head">
+            <nav class="navbar" href="/_">
+                <div class="navbar-brand">
+                    <a class="navbar-item has-text-weight-bold is-italic has-text-success   
+                              is-transparent">
+                     < Vote App >
+                    </a>
+                </div>    
+                <div class="container">
+                    <div id="navbarMenuHeroA" class="navbar-menu">
+                     <! more navbar related code>          
+        </div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/slides.css') }}"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery</title>
+  </head>
+  <body>
+    <!-- <div class="bg-image" id="bg-image-id" style="background-image: url('https://drive.google.com/uc?export=view&id=1vJXy4Zim2nc4bEgcirpXGYjRKHHNQqZV')"></div> -->
+    <!-- <div class="bg-image" id="bg-image-id"></div> -->
+    <div id="canvas">
+      <img
+        src="{{ user_image }}"
+        alt="User Image"
+        width="500"
+        onload="enableVoteBtn()"
+      />
+    </div>
+
+    <p class="btn-switch" id="votebtn" style="display: none">
+      <input
+        type="radio"
+        id="yes"
+        name="switch"
+        class="btn-switch__radio btn-switch__radio_yes"
+      />
+      <input
+        type="radio"
+        checked
+        id="no"
+        name="switch"
+        class="btn-switch__radio btn-switch__radio_no"
+      />
+      <label
+        for="yes"
+        onclick="triggerReload()"
+        class="btn-switch__label btn-switch__label_yes"
+        ><span class="btn-switch__txt">Oui</span></label
+      >
+      <label for="no" class="btn-switch__label btn-switch__label_no"
+        onclick="disableButton()"
+        ><span class="btn-switch__txt">Yes?</span></label
+      >
+    </p>
+
+    <script type="text/javascript">
+      //Add your code here to run after fully page load
+      function enableVoteBtn() {
+        document.getElementById("votebtn").style.display = "inline-block";
+      }
+
+      function disableButton() {
+        document.getElementById("yes").checked = true;
+      }
+
+      function triggerReload() {
+        
+        setTimeout(function () {
+          document.location = "/next";
+        }, 2000);
+      }
+
+      var colors = [
+        "#6e747d",
+        "#59606b",
+        "#414957",
+        "#242a36",
+        "#171c26",
+        "#11151f",
+        "#0c101a",
+        "#04080f",
+        "#02070f",
+        "#000000",  "#000000",  "#000000",  "#000000",
+      ];
+      var i = 0;
+      function changeBackground() {
+        if (document.getElementById("votebtn").style.display == "none"){
+            return
+        }
+        var body = document.getElementsByTagName("body")[0];
+        body.style.backgroundColor = colors[i];
+        i++;
+      }
+
+      setInterval(changeBackground, 1000);
+    </script>
+  </body>
+</html>

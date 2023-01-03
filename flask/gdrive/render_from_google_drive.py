@@ -1,10 +1,14 @@
 import random
 
+from flask_session import Session
 from gdrive_service import GoogleDriveService
 
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, jsonify, redirect, render_template, session, url_for
 
 app = Flask(__name__)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 gdrive = GoogleDriveService().build()
 images = []
 
@@ -25,16 +29,37 @@ def all_files():
 
 @app.route("/file-by-id/<id>")
 def get_file_by_id(id):
-    # file_meta = gdrive.files().get(fileId=id).execute()
-    # image_url = f"https://drive.google.com/file/d/{id}/view"
     image_url = f"https://drive.google.com/uc?export=view&id={id}"
-    return render_template("gallery.html", user_image=image_url), {"Refresh": "10; url=/next"}
+    return render_template("gallery.html", user_image=image_url)
 
+
+@app.route("/next-meta")
+def get_random_image_url():
+    if not session.get("count") or session["count"] >= len(images):
+        session["count"] = 0
+    file_id = images[session["count"]]
+    session["count"] = session["count"] + 1
+    return jsonify({
+        "src": file_id
+    })
 
 @app.route("/next")
 def render_next_image():
-    file_id = random.choice(images)
+    if not session.get("count") or session["count"] >= len(images):
+        session["count"] = 0
+    file_id = images[session["count"]]
+    session["count"] = session["count"] + 1
     return redirect(url_for("get_file_by_id", id=file_id))
+
+
+@app.route("/cards")
+def render_cards():
+    return render_template("card-slide.html")
+
+
+@app.route("/session")
+def debug_session():
+    return f"session[count] = {session['count']}"
 
 
 if __name__ == "__main__":

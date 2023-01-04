@@ -33,7 +33,7 @@
               
 
               <!-- Like Button -->
-              <button class="like-button">
+              <button class="like-button bg">
                 <div class="like-wrapper">
                   <div class="ripple"></div>
                   <svg class="heart" width="24" height="24" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@
           <div class="bg-text text-light ps-3">
 
               <!-- Like Button -->
-              <button class="like-button">
+              <button class="like-button bg1">
                 <div class="like-wrapper">
                   <div class="ripple"></div>
                   <svg class="heart" width="24" height="24" viewBox="0 0 24 24">
@@ -122,7 +122,7 @@
         <div class="bg-text text-light ps-3">
 
                         <!-- Like Button -->
-                        <button class="like-button">
+                        <button class="like-button bg2">
                           <div class="like-wrapper">
                             <div class="ripple"></div>
                             <svg class="heart" width="24" height="24" viewBox="0 0 24 24">
@@ -163,6 +163,17 @@
       </div>
     </div>
     <script type="text/javascript">
+      window.onload = () => {
+        $("#bg").css("background-image", 'url(https://drive.google.com/uc?export=view&id=1toswxFGdQovJ-0xuHaRPuvpyHQWLNMm1)');
+        $('button')[0].classList.add("1toswxFGdQovJ-0xuHaRPuvpyHQWLNMm1");
+        $("#bg1").css("background-image", 'url(https://drive.google.com/uc?export=view&id=17rKKY_REnUSWmnbevnN40N-hI_N8xptN)');
+        $('button')[1].classList.add("17rKKY_REnUSWmnbevnN40N-hI_N8xptN");
+        $("#bg2").css("background-image", 'url(https://drive.google.com/uc?export=view&id=1AJxKso7O4jR48-8mAoZLZv1HIyug9ks4)');
+        $('button')[2].classList.add("1AJxKso7O4jR48-8mAoZLZv1HIyug9ks4");
+        console.log($('button')[0].classList)
+        console.log("onload done!")
+      };
+
       window.onclick = (e) => {
         
         if (e.target.id == "first-path") {
@@ -171,14 +182,25 @@
           ajaxRequestRandom("#bg2");
         } else if (e.target.id == "second-path") {
           ajaxRequestRandom("#bg1");
-        } else{
-          console.log(e.target);
+        } else if(e.target.classList.contains("bg-text")){
+          var likeButton = e.target.querySelector("button");
+          var fileId = likeButton.classList[likeButton.classList.length-1];
+          console.log(fileId);
+          // ajax post
+          $.ajax({
+            type: "POST",
+            url: `/register-vote/${fileId}`,
+            //data: data,
+            success: () => {console.log(`AJAX call with ${fileId} success`)},
+            //dataType: dataType
+          });
         }
         
       };
 
       $(document).keydown(function(e) {
         if(e.keyCode == 39 || e.keyCode == 40){
+          console.log("Key pressed");
           // simulate click event
           $('#first-path').click();
         }
@@ -196,9 +218,19 @@
           // request is ok
           success: function (data) {
             
-            image_url = `https://drive.google.com/uc?export=view&id=${data.src}`
-            console.log(image_url)
-            $(bgidx).css("background-image", `url(${image_url})`)
+            image_url = `https://drive.google.com/uc?export=view&id=${data.src}`;
+            console.log(image_url);
+            $(bgidx).css("background-image", `url(${image_url})`);
+            var likeButton = $(`${bgidx} button`)[0];
+            // get previous id
+            var prev = likeButton.classList[likeButton.classList.length -1];
+            // remove previous id
+            likeButton.classList.remove(prev)
+            // add new id
+            likeButton.classList.add(data.src);
+            // get new id
+            var attr = likeButton.classList[likeButton.classList.length -1];
+            console.log(`likeButton class added: ${attr}`);
           },
 
           // Error handling
@@ -207,6 +239,8 @@
           },
         });
       };
+
+      
     </script>
   </body>
 </html>

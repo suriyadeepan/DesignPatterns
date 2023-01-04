@@ -43,9 +43,14 @@ def get_random_image_url():
         "src": file_id
     })
 
+
 @app.route("/next")
 def render_next_image():
-    if not session.get("count") or session["count"] >= len(images):
+    if not session.get("count"):
+        session["count"] = 0
+        # create vote
+        # session["vote"] = {}
+    if session["count"] >= len(images):
         session["count"] = 0
     file_id = images[session["count"]]
     session["count"] = session["count"] + 1
@@ -59,7 +64,20 @@ def render_cards():
 
 @app.route("/session")
 def debug_session():
-    return f"session[count] = {session['count']}"
+    return jsonify({
+        "count": session['count'],
+        "votes": session['votes']
+    })
+
+
+@app.route("/register-vote/<id>", methods=["POST"])
+def register_vote(id):
+    if not session.get("votes"):
+        session["votes"] = {}
+    if not session.get("votes").get(id):
+        session["votes"][id] = 0
+    session["votes"][id] += 1
+    return jsonify(session["votes"])
 
 
 if __name__ == "__main__":

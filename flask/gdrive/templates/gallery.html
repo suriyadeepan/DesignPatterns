@@ -1,96 +1,55 @@
-<!-- @format -->
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link
+<head>
+  <link
       rel="stylesheet"
       type="text/css"
-      href="{{ url_for('static', filename='styles/slides.css') }}"
+      href="{{ url_for('static', filename='styles/gallery.css') }}"
     />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gallery</title>
-  </head>
-  <body>
-    <!-- <div class="bg-image" id="bg-image-id" style="background-image: url('https://drive.google.com/uc?export=view&id=1vJXy4Zim2nc4bEgcirpXGYjRKHHNQqZV')"></div> -->
-    <!-- <div class="bg-image" id="bg-image-id"></div> -->
-    <div id="canvas">
-      <img
-        src="{{ user_image }}"
-        alt="User Image"
-        width="500"
-        onload="enableVoteBtn()"
-      />
-    </div>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <div class="section-padding gallery-section" id="gallery">
+    <div class="container">
+      <!-- Section Title Start -->
+      <div class="text-center">
+        <h2 class="title">Our Gallery</h2>
+        <p>Some Random Photos Lorem ipsum, dolor sit.</p>
+      </div>
+      <!-- Section Title End -->
 
-    <p class="btn-switch" id="votebtn" style="display: none">
-      <input
-        type="radio"
-        id="yes"
-        name="switch"
-        class="btn-switch__radio btn-switch__radio_yes"
-      />
-      <input
-        type="radio"
-        checked
-        id="no"
-        name="switch"
-        class="btn-switch__radio btn-switch__radio_no"
-      />
-      <label
-        for="yes"
-        onclick="triggerReload()"
-        class="btn-switch__label btn-switch__label_yes"
-        ><span class="btn-switch__txt">Oui</span></label
-      >
-      <label for="no" class="btn-switch__label btn-switch__label_no"
-        onclick="disableButton()"
-        ><span class="btn-switch__txt">Yes?</span></label
-      >
-    </p>
-
-    <script type="text/javascript">
-      //Add your code here to run after fully page load
-      function enableVoteBtn() {
-        document.getElementById("votebtn").style.display = "inline-block";
-      }
-
-      function disableButton() {
-        document.getElementById("yes").checked = true;
-      }
-
-      function triggerReload() {
+      <div id="btncontainer" class="filter">
+        <a class="btn btn-active" href="#all">ALL</a>
+        <a class="btn" href="#Disliked">Disliked</a>
+        <a class="btn" href="#Liked">Liked</a>
         
-        setTimeout(function () {
-          document.location = "/next";
-        }, 2000);
-      }
+      </div>
 
-      var colors = [
-        "#6e747d",
-        "#59606b",
-        "#414957",
-        "#242a36",
-        "#171c26",
-        "#11151f",
-        "#0c101a",
-        "#04080f",
-        "#02070f",
-        "#000000",  "#000000",  "#000000",  "#000000",
-      ];
-      var i = 0;
-      function changeBackground() {
-        if (document.getElementById("votebtn").style.display == "none"){
-            return
-        }
-        var body = document.getElementsByTagName("body")[0];
-        body.style.backgroundColor = colors[i];
-        i++;
-      }
+      <!-- Gallery Section Start -->
 
-      setInterval(changeBackground, 1000);
-    </script>
-  </body>
+      <div class="gallery sets">
+        <!-- <a class="all Disliked"><img src="https://iili.io/y7W4t4.md.webp"/></a>
+
+        <a class="all Disliked"><img src="https://i.redd.it/a90376enwvg91.jpg"/></a>
+
+        <a class="all Disliked"><img src="https://iili.io/y7waOg.md.jpg"/></a>
+        
+        <a class="all Disliked"><img src="https://iili.io/y7WrNf.webp"/></a>
+        
+        <a class="all Liked"><img src="https://i.redd.it/wh6hbexev2v91.jpg"/></a>
+        
+        <a class="all Liked"><img src="https://i.redd.it/4b6s83hss9p91.jpg"/></a>
+         -->
+        
+      </div>
+    </div>
+  </div>  
+  <script src="{{url_for('static', filename='gallery.js')}}"></script>
+
+</body>
 </html>
+      

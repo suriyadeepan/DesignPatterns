@@ -1,5 +1,3 @@
-import random
-
 from flask_session import Session
 from gdrive_service import GoogleDriveService
 

@@ -41,7 +41,9 @@ class Images(db.Model):
 
 
 def get_image_list_meta():
-    list_file = gdrive.files().list().execute()
+    # by default gdrive api returns the first 100 results
+    # we can set the page size from 1 to 1000
+    list_file = gdrive.files().list(pageSize=999).execute()
     # filter files based on typerender_template("gallery.html", user_image=file_id)
     return [file_ for file_ in list_file.get("files")
             if "image" in file_["mimeType"]]
@@ -155,5 +157,6 @@ def init_db(images):
 if __name__ == "__main__":
     images = [f["id"] for f in get_image_list_meta()]
     # with app.app_context():
+    #     db.create_all()
     #     init_db(images)
     app.run(host="0.0.0.0", debug=True)

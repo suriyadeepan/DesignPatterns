@@ -36,3 +36,9 @@ class GoogleDriveService:
             file = None
 
         return file.getvalue()
+
+
+# if __name__ == "__main__":
+#     gdrive = GoogleDriveService().build()
+#     list_of_files = gdrive.files().list(pageSize=999).execute()['files']
+#     print(len(list_of_files))

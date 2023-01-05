@@ -205,6 +205,11 @@
       width: 90%;
       max-height: 50vh;
       height: auto;
+      image-rendering: smooth;
     }
     
+  }
+
+  .text-center {
+    text-align: center;
   }

@@ -36,6 +36,8 @@ var initMechanisms = () => {
         let closeBtn = document.createElement("button");
         let nextBtn = document.createElement("button");
         let prevButton = document.createElement("button");
+        let caption = document.createElement("p");
+        caption.innerHTML = `<h3 class="text-center" >${img.alt}</h3>`;
         prevButton.innerText = "Previous";
         nextBtn.innerText = "Next";
 
@@ -70,7 +72,7 @@ var initMechanisms = () => {
         imgPreview.classList.add("imgPreview");
         imgPreview.src = this.src;
 
-        butonsSection.append(prevButton, nextBtn);
+        butonsSection.append(prevButton, nextBtn, caption);
         openDiv.append(imgPreview, butonsSection, closeBtn);
 
         openDiv.classList.add("openDiv");
@@ -92,10 +94,10 @@ window.onload = () => {
       // the parent
       var galleryElement = $(".gallery")[0];
       data.forEach((x, i) => {
-        // create element
+        // create elementcaption,
         var imageSrc = `https://drive.google.com/uc?export=view&id=${x.file_id}`;
         var elem = document.createElement("a");
-        elem.innerHTML = `<img src="${imageSrc}" /></a>`;
+        elem.innerHTML = `<img src="${imageSrc}" alt="${x.votes} Likes" /></a>`;
         // attach to parent
         elem.classList.add("all");
         if (parseInt(x.votes) > 1) {

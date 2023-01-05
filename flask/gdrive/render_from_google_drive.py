@@ -104,7 +104,7 @@ def render_next_image():
 
 @app.route("/")
 def render_cards():
-    return render_template("card-slide.html")
+    return render_template("cards.html")
 
 
 @app.route("/gallery")

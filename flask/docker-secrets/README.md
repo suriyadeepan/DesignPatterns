@@ -54,3 +54,35 @@ docker build -t suriyadeepan/docker-secrets:latest .
 docker run --add-host=host.docker.internal:host-gateway -p 5000:5000 suriyadeepan/docker-secrets:latest
 ```
 
+## Use secrets via `docker-compose`
+
+Create a private key named `private_key.txt`.
+
+```bash
+echo "This is supposed to be a secret." > private_key.txt
+```
+
+Add the file `private_key.txt` as secret via `docker-compose.yml`
+
+```yml
+version: "3.9"
+
+services:
+  flask:
+    build: ./
+    ports:
+      - 5000:5000
+    restart: "no"
+    secrets:
+      - secure_key
+
+secrets:
+  secure_key:
+    file: private_key.txt
+```
+
+Now the key is available through `/run/secrets/secure_key` file in the container filesystem. 
+
+```python
+open("/run/secrets/secure_key").read()
+```

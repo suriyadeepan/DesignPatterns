@@ -1,0 +1,15 @@
+version: "3.9"
+# define various services
+services:
+  flask: # flask app
+    # image: suriyadeepan/docker-secrets:latest
+    build: ./
+    ports:
+      - 5000:5000
+    restart: "no"
+    secrets:
+      - secure_key
+
+secrets:
+  secure_key:
+    file: private_key.txt

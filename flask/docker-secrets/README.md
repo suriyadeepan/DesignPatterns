@@ -86,3 +86,8 @@ Now the key is available through `/run/secrets/secure_key` file in the container
 ```python
 open("/run/secrets/secure_key").read()
 ```
+
+### Notes
+
+- `docker-compose up --build` rebuilds image every time
+- Add the private key to `.dockerignore` to avoid copying it to the container

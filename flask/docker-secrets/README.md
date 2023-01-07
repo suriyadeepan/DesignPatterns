@@ -51,6 +51,6 @@ docker build -t suriyadeepan/docker-secrets:latest .
 ### Run container
 
 ```bash
-docker container run -p 5000:5000 suriyadeepan/docker-secrets:latest
+docker run --add-host=host.docker.internal:host-gateway -p 5000:5000 suriyadeepan/docker-secrets:latest
 ```
 

@@ -1,0 +1,22 @@
+# @format
+
+version: "3.9"
+# define various services
+services:
+  redis: # redis key-value store
+    image: redis:latest
+    ports:
+      - 5001:6379
+    volumes:
+      - ./config/redis.conf:/redis.conf
+    command: ["redis-server", "/redis.conf"]
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    restart: "no"
+  flask: # flask image
+    image: suriyadeepan/docker-secrets:latest
+    ports:
+      - 5000:5000
+    restart: "no"
+    depends_on:
+      - redis

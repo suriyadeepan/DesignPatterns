@@ -1,0 +1,7 @@
+{
+  "SQLALCHEMY_DATABASE_URI": "sqlite:///voting.db",
+  "SECRET_KEY": "fortheloveofgoddonotusethisassecret",
+  "SQLALCHEMY_TRACK_MODIFICATIONS": "False",
+  "SESSION_PERMANENT": "False",
+  "SESSION_TYPE": "filesystem"
+}

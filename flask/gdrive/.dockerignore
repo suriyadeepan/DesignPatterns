@@ -1,0 +1,6 @@
+.gitignore
+*.json
+instance/
+env*
+__pycache__
+flask_session

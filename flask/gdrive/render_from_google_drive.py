@@ -1,4 +1,6 @@
+import argparse
 import datetime
+import json
 
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
@@ -8,13 +10,14 @@ from sqlalchemy.exc import IntegrityError
 
 from flask import (Flask, jsonify, redirect, render_template, request, session,
                    url_for)
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///voting.db"
-app.config["SECRET_KEY"] = "fortheloveofgoddonotusethisassecret"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+app.config.from_file("config.json", load=json.load)
+app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
 db = SQLAlchemy(app)
 Session(app)
 gdrive = GoogleDriveService().build()
@@ -38,15 +41,6 @@ class Images(db.Model):
     file_id = db.Column(db.String(100), nullable=False, primary_key=True)
     # number of votes received
     votes = db.Column(db.Integer, default=0)
-
-
-def get_image_list_meta():
-    # by default gdrive api returns the first 100 results
-    # we can set the page size from 1 to 1000
-    list_file = gdrive.files().list(pageSize=999).execute()
-    # filter files based on typerender_template("gallery.html", user_image=file_id)
-    return [file_ for file_ in list_file.get("files")
-            if "image" in file_["mimeType"]]
 
 
 @app.route("/all")
@@ -74,12 +68,6 @@ def register_vote(file_id):
     }), 200
 
 
-@app.route("/file-by-id/<id>")
-def get_file_by_id(id):
-    image_url = f"https://drive.google.com/uc?export=view&id={id}"
-    return render_template("gallery.html", user_image=image_url)
-
-
 @app.route("/next-meta")
 def get_random_image_url():
     if not session.get("count") or session["count"] >= len(images):
@@ -91,19 +79,6 @@ def get_random_image_url():
     })
 
 
-@app.route("/next")
-def render_next_image():
-    if not session.get("count"):
-        session["count"] = 0
-        # create vote
-        # session["vote"] = {}
-    if session["count"] >= len(images):
-        session["count"] = 0
-    file_id = images[session["count"]]
-    session["count"] = session["count"] + 1
-    return redirect(url_for("get_file_by_id", id=file_id))
-
-
 @app.route("/")
 def render_cards():
     return render_template("cards.html")
@@ -112,14 +87,6 @@ def render_cards():
 @app.route("/gallery")
 def render_gallery():
     return render_template("gallery.html")
-
-
-@app.route("/session")
-def debug_session():
-    return jsonify({
-        "count": session['count'],
-        "votes": session['votes']
-    })
 
 
 @app.route("/topk/<count>", methods=["GET"])
@@ -135,28 +102,34 @@ def fetch_topk_images(count):
     return jsonify(data), 200
 
 
+def get_image_list_meta():
+    # by default gdrive api returns the first 100 results
+    # we can set the page size from 1 to 1000
+    list_file = gdrive.files().list(pageSize=999).execute()
+    # filter files based on type
+    return [file_ for file_ in list_file.get("files")
+            if "image" in file_["mimeType"]]
+
+
 def init_db(images):
     for im in set(images):
-        try:
+        # check if file exists in db
+        result = Images.query.filter_by(file_id=im)
+        if not result.all():
             image = Images(file_id=im)
             db.session.add(image)
-            db.session.commit()
-        except IntegrityError:
-            print(image, "exits in db")
-
-# @app.route("/register-vote/<id>", methods=["POST"])
-# def register_vote(id):
-#     if not session.get("votes"):
-#         session["votes"] = {}
-#     if not session.get("votes").get(id):
-#         session["votes"][id] = 0
-#     session["votes"][id] += 1
-#     return jsonify(session["votes"])
+    db.session.commit()
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--init", action="store_true")
+    args = parser.parse_args()
+    # create a list of image urls
     images = [f["id"] for f in get_image_list_meta()]
-    # with app.app_context():
-    #     db.create_all()
-    #     init_db(images)
+    # initialize database
+    if args.init:
+        with app.app_context():
+            db.create_all()
+            init_db(images)
     app.run(host="0.0.0.0", debug=True)

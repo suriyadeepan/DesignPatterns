@@ -6,18 +6,12 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from gdrive_service import GoogleDriveService
 from sqlalchemy import text
-from sqlalchemy.exc import IntegrityError
 
 from flask import (Flask, jsonify, redirect, render_template, request, session,
                    url_for)
-from werkzeug.middleware.proxy_fix import ProxyFix
-
 
 app = Flask(__name__)
 app.config.from_file("config.json", load=json.load)
-app.wsgi_app = ProxyFix(
-    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
-)
 db = SQLAlchemy(app)
 Session(app)
 gdrive = GoogleDriveService().build()

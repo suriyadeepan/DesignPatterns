@@ -55,3 +55,59 @@ Open up the instance's public IPV4 address or public IPV4 DNS in browser.
 ## Resources
 
 - [Deploying Docker Containers with AWS ec2 instance](https://medium.com/@chandupriya93/deploying-docker-containers-with-aws-ec2-instance-265038bba674)
+
+## Deploy to ec2 with NGINX and GUNICORN
+
+When you run the flask app in CLI, you will run the application development mode. Flask includes Werkzeug development server.
+
+> The development server is not intended to be used on production systems. It was designed especially for development purposes and performs poorly under high load. (https://werkzeug.palletsprojects.com/en/0.14.x/serving/)
+
+### NGINX
+
+Install nginx.
+
+```bash
+sudo apt install nginx
+# open up config file
+sudo vim /etc/nginx/nginx.conf
+```
+
+Comment out the pages served by default.
+
+```conf
+   # include /etc/nginx/sites-enabled/*;
+```
+
+Add a reverse proxy to our server running in port 5000.
+
+```conf
+   http {
+    ...
+
+        server {
+                listen 80;
+                access_log /var/log/nginx/access.log;
+
+                location / {
+                        proxy_pass http://localhost:5000;
+                }
+        }
+   }
+```
+
+Now `localhost` will point to our flask server.
+
+
+### GUNICORN
+
+Install `gunicorn`.
+
+```bash
+pip install gunicorn
+```
+
+Run flask app with gunicorn's WSGI server.
+
+```bash
+gunicorn --bind 127.0.0.1:5000 hello:app
+```

@@ -1,0 +1,18 @@
+version: "3.9"
+# define various services
+services:
+  gdrive-flask:
+    build: ./
+    image: gdrive-flask:latest
+    ports:
+      - 80:80
+    restart: "no"
+    secrets:
+      - secure_key
+      - config_file
+
+secrets:
+  secure_key:
+    file: secret.json
+  config_file:
+    file: config.json

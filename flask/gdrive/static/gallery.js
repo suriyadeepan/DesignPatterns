@@ -100,7 +100,7 @@ window.onload = () => {
         elem.innerHTML = `<img src="${imageSrc}" alt="${x.votes} Likes" /></a>`;
         // attach to parent
         elem.classList.add("all");
-        if (parseInt(x.votes) > 1) {
+        if (parseInt(x.votes) > 0) {
           elem.classList.add("Liked");
         } else {
           elem.classList.add("Disliked");

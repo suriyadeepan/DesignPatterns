@@ -1,11 +1,18 @@
 version: "3.9"
 # define various services
 services:
+  nginx-custom:
+    build: ./nginx-custom/
+    ports:
+      - 80:80
+    restart: "no"
+    depends_on:
+      - gdrive-flask
   gdrive-flask:
     build: ./
     image: gdrive-flask:latest
     ports:
-      - 80:80
+      - 5000:5000
     restart: "no"
     secrets:
       - secure_key

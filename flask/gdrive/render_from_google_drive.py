@@ -11,7 +11,7 @@ from flask import (Flask, jsonify, redirect, render_template, request, session,
                    url_for)
 
 app = Flask(__name__)
-app.config.from_file("config.json", load=json.load)
+app.config.from_file("/run/secrets/config_file", load=json.load)
 db = SQLAlchemy(app)
 Session(app)
 gdrive = GoogleDriveService().build()
@@ -115,15 +115,15 @@ def init_db(images):
     db.session.commit()
 
 
+# create a list of image urls
+images = [f["id"] for f in get_image_list_meta()]
+# initialize database
+with app.app_context():
+    db.create_all()
+    init_db(images)
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--init", action="store_true")
-    args = parser.parse_args()
-    # create a list of image urls
-    images = [f["id"] for f in get_image_list_meta()]
-    # initialize database
-    if args.init:
-        with app.app_context():
-            db.create_all()
-            init_db(images)
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument("--init", action="store_true")
+    # args = parser.parse_args()
     app.run(host="0.0.0.0", debug=True)

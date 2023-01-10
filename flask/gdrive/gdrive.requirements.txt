@@ -5,3 +5,4 @@ Flask
 Flask-Session
 Flask-SQLAlchemy
 argparse
+gunicorn

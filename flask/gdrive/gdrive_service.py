@@ -12,7 +12,8 @@ class GoogleDriveService:
         self._SCOPES = ['https://www.googleapis.com/auth/drive']
 
         _base_path = os.path.dirname(__file__)
-        _credential_path = os.path.join(_base_path, 'secret.json')
+        # _credential_path = os.path.join(_base_path, 'secret.json')
+        _credential_path = "/run/secrets/secure_key"
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = _credential_path
 
     def build(self):

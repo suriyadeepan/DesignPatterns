@@ -1,0 +1,29 @@
+version: "3.9"
+# define various services
+services:
+  nginx-custom:
+    build: ./nginx-custom/
+    ports:
+      - 80:80
+      - 443:443
+    restart: "no"
+    depends_on:
+      - gdrive-flask
+    volumes:
+      - ./certs/privkey.pem:/etc/nginx/certs/privkey.pem
+      - ./certs/fullchain.pem:/etc/nginx/certs/fullchain.pem
+  gdrive-flask:
+    build: ./
+    image: gdrive-flask:latest
+    ports:
+      - 5000:5000
+    restart: "no"
+    secrets:
+      - secure_key
+      - config_file
+
+secrets:
+  secure_key:
+    file: secret.json
+  config_file:
+    file: config.json

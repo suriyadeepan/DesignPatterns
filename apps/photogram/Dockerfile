@@ -8,8 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Install pip requirements
-COPY gdrive.requirements.txt .
-RUN python -m pip install -r gdrive.requirements.txt
+COPY requirements.txt .
+RUN python -m pip install -r requirements.txt
 
 WORKDIR /app
 COPY . /app
@@ -21,4 +21,4 @@ USER appuser
 EXPOSE 5000
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD gunicorn --bind 0.0.0.0:5000 render_from_google_drive:app
+CMD gunicorn --bind 0.0.0.0:5000 photogram:app

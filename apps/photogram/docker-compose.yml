@@ -7,10 +7,10 @@ services:
       - 80:80
     restart: "no"
     depends_on:
-      - gdrive-flask
-  gdrive-flask:
+      - photogram
+  photogram:
     build: ./
-    image: gdrive-flask:latest
+    image: photogram:latest
     ports:
       - 5000:5000
     restart: "no"

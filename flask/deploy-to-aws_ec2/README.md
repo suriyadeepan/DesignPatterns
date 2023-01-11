@@ -111,3 +111,20 @@ Run flask app with gunicorn's WSGI server.
 ```bash
 gunicorn --bind 127.0.0.1:5000 hello:app
 ```
+
+## Troubleshooting
+
+Your instance's public DNS name https://ec2-x-x-x-x.y-z-1.compute.amazonaws.com/ is not loading. Verify that you could use `curl` to check the ports within the docker container.
+
+```bash
+docker exec -it <flask-container-id> /bin/bash
+...
+$ curl localhost:5000  # or whichever port your app is running on
+...
+docker exec -it <nginx-container-id> /bin/bash
+...
+$ curl localhost  # check port 80 of nginx container
+```
+
+Have you added a TLS certificate? No? Then change `https` in the url to `http`.
+

@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+ssl/localhost.crt
+ssl/localhost.key

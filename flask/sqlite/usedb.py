@@ -4,9 +4,11 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 
 from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///voting.db"
+dbdir = os.path.join(os.path.dirname(app.instance_path), "poll.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{dbdir}'
 app.config["SECRET_KEY"] = "fortheloveofgoddonotusethisassecret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -43,4 +45,6 @@ def register_vote(file_id):
 
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(host="0.0.0.0", debug=True)

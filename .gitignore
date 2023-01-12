@@ -131,3 +131,4 @@ dmypy.json
 .pyre/
 ssl/localhost.crt
 ssl/localhost.key
+*.db

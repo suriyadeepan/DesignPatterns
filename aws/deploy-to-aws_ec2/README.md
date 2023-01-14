@@ -8,8 +8,8 @@ After logging in to ec2 instance as `ec2-user`, [add user to docker user group](
 so you can run  docker commands without sudo.
 
 ```bash
-sudo usermod -a -G docker
-docker:x:998:ec2-user
+sudo usermod -a -G docker ec2-user
+grep docker /etc/group # should show => "docker:x:998:ec2-user"
 newgrp docker
 ```
 

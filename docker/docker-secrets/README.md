@@ -7,6 +7,16 @@
 - [(Medium Paywalled)Secure Your Docker Images with Docker Secrets](https://towardsdatascience.com/secure-your-docker-images-with-docker-secrets-f2b92ec398a0)
 - [Finding leaked credentials in Docker images - How to secure your Docker images](https://www.youtube.com/watch?v=SOd_XMIGRqo)
 
+**NOTE**
+
+Docker secrets do not get compiled into the image.
+
+They are stored with the Docker Swarm Manager running locally.
+
+When we run the image pulled from dockerhub in an ec2 instance, the secrets `/run/secrets/secure_key` are unavailable,
+unless you add them manually to the ec2's docker swarm manager.
+
+![](docs/your-secrets-are-safe.jpeg)
 
 ## Creating a secret
 
@@ -40,7 +50,6 @@ EXPOSE 5000
 # run application
 CMD python ./app.py
 ```
-
 
 ### Build Docker Image
 
@@ -81,7 +90,7 @@ secrets:
     file: private_key.txt
 ```
 
-Now the key is available through `/run/secrets/secure_key` file in the container filesystem. 
+Now the key is available through `/run/secrets/secure_key` file in the container filesystem.
 
 ```python
 open("/run/secrets/secure_key").read()

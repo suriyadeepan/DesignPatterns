@@ -38,3 +38,12 @@ curl http://localhost:5001/todo2 -d "data=Change clock battery" -X PUT
 curl http://localhost:5001/todo2
 # {"todo2": "Change clock battery"}
 ```
+
+## Interact with Audio API
+
+```bash
+# GET
+curl http://localhost:5001/audio/u23-f-001 --output filename.wav
+# POST
+curl -X POST -F "file=@auido.wav" http://localhost:5001/audio/u23-f-002
+```
